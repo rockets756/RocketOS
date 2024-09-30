@@ -1,0 +1,51 @@
+Notes:
+Do not include video.inc more than once until a #pragma once system is created.
+Video mode 3 is being used. Its resolution is 640x200.
+
+(Archive) {
+    ;; print_string function
+    ;; eax = pointer to string you wish to print
+    ;; Function internal registers:
+    ;;     edx = video memory pointer
+    ;;
+    videomempointer: dd 0xb8000					; Location of video memory
+    print_string:								; Start of print_string function
+    	pusha									; Start of print_string function
+    	mov edx, [videomempointer]				; Store the videopointer in edx
+    print_string_loop:							; Start of loop that prints each character
+    	mov ch, [eax]							; Store the character we are printing to ch
+    	cmp ch, 0x00							; Check end of string
+    	je print_string_done					; Check end of string
+    	cmp ch, 0x0a							; Check newline character
+    	je print_string_new_line				; Check newline character
+    	cmp ch, 0x0d							; Skip secondary newline character
+    	je print_string_skip_char				; Skip secondary newline character
+    	mov [edx], ch							; Print character
+    	inc eax									; Prep next character
+    	add edx, 0x02							; Increase the video memroy pointer to print the next string
+    	jmp print_string_loop					; Loop to print next character
+    print_string_skip_char:						; Skips the character we dont want to print
+    	inc eax									; Incraments character pointer
+    	jmp print_string_loop					; 'returns' by looping to print the next character
+    print_string_new_line:						; TODO: Implement this
+        push eax                                ; Save eax because we need it for multiplying
+        push ebx
+        mov al, [current_line]                  ; Repurpose edx to hold the line number
+        inc al                                  ; Incrament the line number
+        mov [current_line], al                  ; Store the line number for later
+    	; We are making eax the memory address of the start of the next line on screen.
+    	mov ebx, [current_line]
+    	mov eax, 640
+    	mul ebx
+    	add ebx, 0xb8000
+    	mov edx, ebx
+    	pop ebx
+    	pop eax                                 ; Return eax to be the character pointer within the string
+    	inc eax                                 ; Prepare to print the next character if there is any
+    	jmp print_string_loop                   ; Go to print the next character if it exists
+    print_string_done:							; End of print_string function
+    	mov [videomempointer], edx				; Store the updated video memory pointer to memory
+    	popa									; Return from print_string function
+    	ret										; Return from print_string function
+    current_line: db 0x00                       ; This holds the line number we are currently on
+}

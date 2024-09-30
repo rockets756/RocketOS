@@ -1,0 +1,3 @@
+compilers:
+  - description: NASM for operating system
+    match-compiler-exe: "/usr/bin/nasm"

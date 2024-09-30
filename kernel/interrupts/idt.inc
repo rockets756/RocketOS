@@ -1,0 +1,2 @@
+[extern idt_init]
+
