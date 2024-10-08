@@ -19,7 +19,7 @@ kmain:
 	call write_line
 	mov eax, WELCOME_MSG2
 	call write_line
-	mov eax, 0x000fa43
+	mov eax, 0x0abcdef
 	call print_hex
 loop:
 	hlt

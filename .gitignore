@@ -1,0 +1,10 @@
+.idea
+os.img
+boot/boot_sect.bin
+kernel/kernel.o
+kernel/kernel.elf
+kernel/video/video.o
+kernel/interrupts/idt.o
+kernel/interrupts/isrs.o
+kernel/interrupts/pic.o
+kernel/keyboard/keyboard.o

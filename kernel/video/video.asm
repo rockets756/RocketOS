@@ -36,7 +36,32 @@ write_line_done:
 	pop ebx
 	ret
 
+
+;; print_hex function 
+;; Inputs: 
+;;   eax or ebx = 32 bit number to print
+string_hex:       db '0x'
+string_hex_buff:  db '00000000', 0x00
+hex_digits:       db '0123456789abcdef'
 print_hex:
+  push eax 
+  push ebx 
+  mov ebx, eax
+  lea edi, [string_hex_buff + 7]   ; Point to the end of the buffer (right-most digit)
+  mov byte [edi+1], 0     ; Null-terminate the string
+convert:
+  mov eax, ebx           ; Move the number to eax
+  and eax, 0xF           ; Mask all but the least significant 4 bits
+  mov dl, [hex_digits + eax] ; Get the corresponding hex character
+  mov [edi], dl          ; Store it in the buffer
+  shr ebx, 4             ; Shift right by 4 bits to process the next hex digit
+  dec edi                ; Move to the next position in the buffer
+  test ebx, ebx          ; Check if the number is zero
+  jnz convert            ; If not, continue conversion
+  mov eax, string_hex
+  call write_line
+  pop ebx 
+  pop eax 
 	ret
 
 ;; put_char function
