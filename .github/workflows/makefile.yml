@@ -13,10 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    - name: configure
-      run: ./configure
-
     - name: Install dependencies
       run: apt install nasm
     - name: Compile
