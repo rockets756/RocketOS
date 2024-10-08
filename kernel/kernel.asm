@@ -3,16 +3,8 @@
 jmp kmain
 
 %include "kernel/video/video.inc"	; Text mode video library header
-%include "kernel/interrupts/pic.inc"
-%include "kernel/interrupts/idt.inc"
-%include "kernel/interrupts/isrs.inc"
 
 kmain:
-	cli
-	call idt_init
-	call isrs_init
-	;sti
-
 	mov ah, GREY_BACKGROUND
 	call clear_screen
 	mov eax, WELCOME_MSG
@@ -21,9 +13,11 @@ kmain:
 	call write_line
 	mov eax, 0x0abcdef
 	call print_hex
+
 loop:
 	hlt
 	jmp loop
+
 kill:	; Kills the cpu (restart mandatory)
 	cli
 	hlt

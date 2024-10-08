@@ -1,1 +1,0 @@
-[extern isrs_init]
